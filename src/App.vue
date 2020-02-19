@@ -18,13 +18,20 @@ export default {
   },
 
   data: () => ({
-    //
+    
   }),
 };
 </script>
 
 <style>
-  #app > div{
-    flex-direction: row;
-  }
+    * {
+        min-height: max-content;
+    }
+    #app>div{
+        flex-direction: row;
+        height: auto;
+    }
+    .col{
+        height: max-content;
+    }
 </style>
