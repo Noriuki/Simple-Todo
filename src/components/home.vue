@@ -43,16 +43,21 @@
 </template>
 
 <script>
+import {mapActions, mapGetters} from 'vuex';
 export default {
     name:"home",
     computed:{
-        getTasks: () => { return (this.$store.getters.getTasks)}
+       ...mapGetters([
+           'getTasks',
+       ])
     },
     data: () => ({
         items: this.$store.getters.getTasks(),
     }),
     methods: {
-        addTask: () => { return  (this.$store.dispath('addTask'))},
+        ...mapActions([
+            'addTask',
+        ])
     }
 }
 </script>
