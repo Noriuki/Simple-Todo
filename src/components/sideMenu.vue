@@ -3,13 +3,14 @@
       v-model="drawer"
       :mini-variant.sync="mini"
       permanent
+      id = "sideMenu"
     >
       <v-list-item class="px-2">
         <v-list-item-avatar>
-          <v-img src="https://randomuser.me/api/portraits/men/85.jpg"></v-img>
+          <v-img src="https://avatars0.githubusercontent.com/u/43408440?v=4"></v-img>
         </v-list-item-avatar>
 
-        <v-list-item-title>John Leider</v-list-item-title>
+        <v-list-item-title>Noriuki</v-list-item-title>
 
         <v-btn
           icon
@@ -46,8 +47,8 @@ export default {
         return {
             drawer: true,
             items: [
-            { title: 'Home', icon: 'mdi-home-city' },
-            { title: 'My Account', icon: 'mdi-account' },
+            { title: 'Home', icon: 'mdi-home' },
+            { title: 'My Settings', icon: 'mdi-account' },
             { title: 'Users', icon: 'mdi-account-group-outline' },
             ],
             mini: true,
@@ -57,5 +58,7 @@ export default {
 </script>
 
 <style>
-
+#sideMenu {
+    min-width: max-content;
+}
 </style>

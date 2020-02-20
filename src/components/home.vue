@@ -1,63 +1,55 @@
 <template>
   <div class="d-flex-wrap" id="home">
-    <v-col cols="6">
-        <v-text-field v-model="taskValues" 
-        v-on:keyup.enter="addTask(taskValues)"
-        color="green accent-4"></v-text-field>
-    </v-col>
-    <v-col cols="8">
-        <v-list shaped>
-            <v-list-item-group multiple>
-                <template v-for="(item, i) in items">
-                <v-divider
-                    v-if="!item"
-                    :key="`divider-${i}`"
-                ></v-divider>
 
-                <v-list-item
-                    v-else
-                    :key="`item-${i}`"
-                    :value="item"
-                    active-class="deep-purple--text text--accent-4"
-                >
-                    <template v-slot:default="{ active, toggle }">
-                    <v-list-item-content>
-                        <v-list-item-title v-text="item"></v-list-item-title>
-                    </v-list-item-content>
-
-                    <v-list-item-action>
-                        <v-checkbox
-                        :input-value="active"
-                        :true-value="item"
-                        color="deep-purple accent-4"
-                        @click="toggle"
-                        ></v-checkbox>
-                    </v-list-item-action>
-                    </template>
-                </v-list-item>
-                </template>
-            </v-list-item-group>
+    <v-col cols="7">
+        <v-text-field v-model="newTodo" 
+            @keyup.enter="addTodo"
+            color="success"
+            placeholder="What's up?"
+            :clearable="true"
+        >
+        </v-text-field>
+        <v-progress-linear class="my-0" color="success" v-model="progressPercentage"/>
+        <v-list class="pa-0" id="todoList">
+          <template v-for="todo in getTodos">
+            <v-divider :key="`${todo.name}-divider`"></v-divider>
+            <todoItem :key="`${todo.name}`" :todo="todo"/>
+          </template>
         </v-list>
     </v-col>
+
   </div>
 </template>
 
 <script>
-import {mapActions, mapGetters} from 'vuex';
+import {mapGetters} from 'vuex';
+import todoItem from './todoItem.vue';
+
 export default {
     name:"home",
+    components: {
+        todoItem: todoItem,
+    },
     computed:{
        ...mapGetters([
-           'getTasks',
-       ])
+           'getTodos',
+       ]),
+        getTodos() {
+            return this.$store.getters.getTodos;
+        },
+        progressPercentage () {
+            const remaining = this.getTodos.filter(todo => !todo.done).length
+            const len = this.getTodos.length
+            return ( (len - remaining) * 100) / len
+        }
     },
     data: () => ({
-        items: this.$store.getters.getTasks(),
+        newTodo: '',
     }),
     methods: {
-        ...mapActions([
-            'addTask',
-        ])
+        addTodo() {
+            this.$store.dispatch('addTodo', this.newTodo)
+        }
     }
 }
 </script>
@@ -68,7 +60,12 @@ export default {
         flex-grow: 1;
         justify-content: center;
         align-items: center;
-        flex-wrap: wrap;
+        font-size: 1.1rem;
+    }
+    #todoList {
+        border: 1px solid #f2f2f2;
+        display: flex;
+        flex-direction: column;
     }
 
 </style>
