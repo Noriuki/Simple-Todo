@@ -1,21 +1,30 @@
 <template>
   <div class="d-flex-wrap" id="home">
+      
+    <v-col cols="6">
 
-    <v-col cols="7">
-        <v-text-field v-model="newTodo" 
+        <v-text-field v-model="todoText" 
             @keyup.enter="addTodo"
             color="success"
             placeholder="What's up?"
             :clearable="true"
         >
         </v-text-field>
-        <v-progress-linear class="my-0" color="success" v-model="progressPercentage"/>
-        <v-list class="pa-0" id="todoList">
+
+        <!-- <v-progress-linear class="my-0" color="success" v-model="progressPercentage"/>
+        <v-date-picker class="mt-4" v-model="date" full-width
+        locale="locale" color="green lighten-1"></v-date-picker> -->
+
+    </v-col>
+    <v-col cols="6" id="todoList">
+
+        <v-list class="pa-0">
           <template v-for="todo in getTodos">
-            <v-divider :key="`${todo.name}-divider`"></v-divider>
-            <todoItem :key="`${todo.name}`" :todo="todo"/>
+            <v-divider :key="`${todo.name}--${todo.date}--divider`"></v-divider>
+            <todoItem :key="`${todo.name}--${todo.date}`" :todo="todo"/>
           </template>
         </v-list>
+
     </v-col>
 
   </div>
@@ -34,21 +43,26 @@ export default {
        ...mapGetters([
            'getTodos',
        ]),
-        getTodos() {
-            return this.$store.getters.getTodos;
-        },
         progressPercentage () {
             const remaining = this.getTodos.filter(todo => !todo.done).length
             const len = this.getTodos.length
             return ( (len - remaining) * 100) / len
         }
     },
-    data: () => ({
-        newTodo: '',
-    }),
+    data: () => {
+        let startDate = new Date().toISOString().substr(0, 10);
+        return {
+            todoText: '',
+            date: startDate,
+            dateNow: startDate,
+        }
+    },
     methods: {
         addTodo() {
-            this.$store.dispatch('addTodo', this.newTodo)
+            if (Date.parse( this.date.replace(/-/g, ' ') ) >= Date.parse(this.dateNow.replace(/-/g, ' '))) {
+                var newTodo = {name: this.todoText, dateTodo:this.date}
+                this.$store.dispatch('addTodo', newTodo)
+            }
         }
     }
 }
@@ -57,12 +71,17 @@ export default {
 <style>
     #home {
         display: flex;
+        flex-wrap: wrap;
         flex-grow: 1;
         justify-content: center;
         align-items: center;
         font-size: 1.1rem;
+        height: 100vh;
+        padding: 10px;
     }
     #todoList {
+        height: 78%;
+        overflow: auto;
         border: 1px solid #f2f2f2;
         display: flex;
         flex-direction: column;

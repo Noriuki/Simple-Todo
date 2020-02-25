@@ -1,35 +1,40 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-const os = require('os');
-const storage = require('electron-json-storage');
 Vue.use(Vuex)
-storage.setDataPath(os.tmpdir());
-storage.set('todo-storage', [], function(error) {
-    if (error) throw error;
-});
-
-export default new Vuex.Store({
-  state: {
-    todos: storage.get('todo-storage', (error, data) => {
-        if (error) throw error;
-        return data
-      }),
+export default new Vuex.Store({ 
+  state:{
+    todos: JSON.parse(window.localStorage.getItem('todos'))
   },
   getters: {
     getTodos(state) {
-        return state.todos;
+      if(state.todos == undefined) {
+        window.localStorage.setItem('todos', JSON.stringify([{name:'First Todo', dateTodo: toString(Date.now()), done: false, dateCreated:Date.now()}]))
+      }
+      return state.todos
     }
   },
   mutations: {
     addtodo(state, newTodo) {
-        state.todos.push({
-            name:newTodo,
-            done: false
-        });
+        let todos = JSON.parse(window.localStorage.getItem('todos'));
+        todos.push({name:newTodo.name,dateTodo: newTodo.dateTodo,done: false, date:Date.now()})
+        state.todos  = todos;
+        window.localStorage.setItem('todos',JSON.stringify(todos));
     },
-    editTodo (state, { todo, text = todo.text, done = todo.done }) {
-        todo.text = text
-        todo.done = done
+    editTodo (state, {todo, name = todo.name, dateTodo = todo.dateTodo, done = todo.done}) {
+
+      let todos = JSON.parse(window.localStorage.getItem('todos'));
+      todos = todos.filter( t => JSON.stringify(t) !== JSON.stringify(todo))
+      todo = {name: name , dateTodo: dateTodo, done: done, dateCreated:Date.now()}
+      
+      todos.push(todo)
+      state.todos  = todos;
+      window.localStorage.setItem('todos',JSON.stringify(todos));
+    },
+    removeTodo(state, Todo) {
+      let todos = JSON.parse(window.localStorage.getItem('todos'));
+      todos = todos.filter(todo => JSON.stringify(todo) !== JSON.stringify(Todo))
+      state.todos  = todos;
+      window.localStorage.setItem('todos',JSON.stringify(todos));
     }
 
   },
@@ -38,7 +43,10 @@ export default new Vuex.Store({
         commit("addtodo", newTodo);
     },
     toggleTodo ({ commit }, todo) {
-        commit('editTodo', { todo , done: !todo.done })
+        commit('editTodo', {todo ,done: !todo.done})
     },
+    removeTodo({commit}, todo) {
+      commit('removeTodo', todo)
+    }
   }
 })

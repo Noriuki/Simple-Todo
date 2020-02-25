@@ -1,37 +1,30 @@
 <template>
   <v-app>
-   <sideMenu/>
-   <home/>
+    <div class="d-flex-wrap" id="appWrap">
+      <sideMenu/>
+      <home/>
+    </div>
   </v-app>
 </template>
 
 <script>
 import sideMenu from './components/sideMenu.vue';
-import home from './components/home';
+import home from './components/home.vue';
 
 export default {
   name: 'App',
 
   components: {
-    sideMenu: sideMenu,
-    home: home,
+    sideMenu,
+    home,
   },
-
-  data: () => ({
-    
-  }),
 };
 </script>
 
 <style>
-    * {
-        min-height: max-content;
-    }
-    #app>div{
-        flex-direction: row;
-        height: auto;
-    }
-    .col{
-        height: max-content;
-    }
+  #appWrap{
+    display: flex;
+    flex-direction: row;
+    height: 100%;
+  }
 </style>
