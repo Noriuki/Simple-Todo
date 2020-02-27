@@ -1,4 +1,4 @@
-# random-todo
+# simple-todo
 
 ## Project setup
 ```

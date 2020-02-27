@@ -11,9 +11,9 @@
         >
         </v-text-field>
 
-        <!-- <v-progress-linear class="my-0" color="success" v-model="progressPercentage"/>
+        <v-progress-linear class="my-0" color="success" v-model="progressPercentage"/>
         <v-date-picker class="mt-4" v-model="date" full-width
-        locale="locale" color="green lighten-1"></v-date-picker> -->
+        :locale="locale" color="green lighten-1"></v-date-picker>
 
     </v-col>
     <v-col cols="6" id="todoList">
@@ -50,16 +50,16 @@ export default {
         }
     },
     data: () => {
-        let startDate = new Date().toISOString().substr(0, 10);
         return {
+            locale: window.navigator.language,
             todoText: '',
-            date: startDate,
-            dateNow: startDate,
+            date: null,
+            dateNow: new Date().setHours(0,0,0,0)
         }
     },
     methods: {
         addTodo() {
-            if (Date.parse( this.date.replace(/-/g, ' ') ) >= Date.parse(this.dateNow.replace(/-/g, ' '))) {
+            if ( Date.parse(this.date.replace(/-/g, ' ')) >= this.dateNow) {
                 var newTodo = {name: this.todoText, dateTodo:this.date}
                 this.$store.dispatch('addTodo', newTodo)
             }
