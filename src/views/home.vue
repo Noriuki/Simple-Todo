@@ -12,8 +12,32 @@
         </v-text-field>
 
         <v-progress-linear class="my-0" color="success" v-model="progressPercentage"/>
-        <v-date-picker class="mt-4" v-model="date" full-width
-        :locale="locale" color="green lighten-1"></v-date-picker>
+        <!-- <v-date-picker class="mt-4" v-model="date" full-width
+        :locale="locale" color="green lighten-1"></v-date-picker> -->
+        <v-menu
+        ref="menu"
+        v-model="menu"
+        :close-on-content-click="false"
+        :return-value.sync="date"
+        transition="scale-transition"
+        offset-y
+        min-width="290px"
+        >
+            <template v-slot:activator="{ on }">
+                <v-text-field
+                    v-model="date"
+                    label="Choose a date"
+                    prepend-icon="mdi-alarm-check"
+                    readonly
+                    v-on="on"
+                ></v-text-field>
+            </template>
+            <v-date-picker v-model="date" no-title scrollable>
+                <v-spacer></v-spacer>
+                <v-btn text color="primary" @click="menu = false">Cancel</v-btn>
+                <v-btn text color="primary" @click="$refs.menu.save(date)">OK</v-btn>
+            </v-date-picker>
+        </v-menu>
 
     </v-col>
     <v-col cols="6" id="todoList">
@@ -32,7 +56,7 @@
 
 <script>
 import {mapGetters} from 'vuex';
-import todoItem from './todoItem.vue';
+import todoItem from '../components/todoItem.vue';
 
 export default {
     name:"home",
@@ -54,7 +78,8 @@ export default {
             locale: window.navigator.language,
             todoText: '',
             date: null,
-            dateNow: new Date().setHours(0,0,0,0)
+            dateNow: new Date().setHours(0,0,0,0),
+            menu: false,
         }
     },
     methods: {
