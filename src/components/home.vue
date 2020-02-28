@@ -59,9 +59,14 @@ export default {
     },
     methods: {
         addTodo() {
-            if ( Date.parse(this.date.replace(/-/g, ' ')) >= this.dateNow) {
-                var newTodo = {name: this.todoText, dateTodo:this.date}
-                this.$store.dispatch('addTodo', newTodo)
+            let newTodo;
+            if(this.date == null) {
+                newTodo = {name: this.todoText, dateTodo:this.date}
+                this.$store.dispatch('addTodo', newTodo);
+            }
+            else if ( Date.parse(this.date.replace(/-/g, ' ')) >= this.dateNow) {
+                newTodo = {name: this.todoText, dateTodo:this.date}
+                this.$store.dispatch('addTodo', newTodo);
             }
         }
     }
@@ -75,7 +80,7 @@ export default {
         flex-grow: 1;
         justify-content: center;
         align-items: center;
-        font-size: 1.1rem;
+        font-size: 1rem;
         height: 100vh;
         padding: 10px;
     }

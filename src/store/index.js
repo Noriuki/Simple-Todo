@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 Vue.use(Vuex)
+
 export default new Vuex.Store({ 
   state:{
     todos: JSON.parse(window.localStorage.getItem('todos'))
@@ -8,7 +9,7 @@ export default new Vuex.Store({
   getters: {
     getTodos(state) {
       if(state.todos == undefined) {
-        window.localStorage.setItem('todos', JSON.stringify([{name:'First Todo', dateTodo: toString(Date.now()), done: false, dateCreated:Date.now()}]))
+        window.localStorage.setItem('todos', JSON.stringify([{name:'First Todo', dateTodo: '', done: false, dateCreated:new Date(Date.now()).toISOString().substr(0,10)}]))
       }
       return state.todos
     }
