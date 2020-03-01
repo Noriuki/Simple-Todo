@@ -11,19 +11,15 @@
         >
         </v-text-field>
 
-        <v-progress-linear class="my-0" color="success" v-model="progressPercentage"/>
-        <!-- <v-date-picker class="mt-4" v-model="date" full-width
-        :locale="locale" color="green lighten-1"></v-date-picker> -->
-        <v-menu
-        ref="menu"
-        v-model="menu"
-        :close-on-content-click="false"
-        :return-value.sync="date"
-        transition="scale-transition"
-        offset-y
-        min-width="290px"
-        >
-            <template v-slot:activator="{ on }">
+        <div class="d-flex-wrap dataPicker">
+            <v-col cols="6" class="pa-0">
+                <v-date-picker v-model="date" color="green" no-title scrollable>
+                    <v-spacer></v-spacer>
+                    <v-btn text color="green" @click="date = null">Clear</v-btn>
+                    <v-spacer></v-spacer>
+                </v-date-picker>
+            </v-col>
+            <v-col cols="6" class="pa-0" align="center">
                 <v-text-field
                     v-model="date"
                     label="Choose a date"
@@ -31,13 +27,9 @@
                     readonly
                     v-on="on"
                 ></v-text-field>
-            </template>
-            <v-date-picker v-model="date" no-title scrollable>
-                <v-spacer></v-spacer>
-                <v-btn text color="primary" @click="menu = false">Cancel</v-btn>
-                <v-btn text color="primary" @click="$refs.menu.save(date)">OK</v-btn>
-            </v-date-picker>
-        </v-menu>
+                <v-progress-circular class="mt-2" size="120" color="success" v-model="progressPercentage"/>
+            </v-col>
+        </div>
 
     </v-col>
     <v-col cols="6" id="todoList">
@@ -115,6 +107,10 @@ export default {
         border: 1px solid #f2f2f2;
         display: flex;
         flex-direction: column;
+    }
+    .dataPicker{
+        display: flex;
+        justify-content: center!important;
     }
 
 </style>

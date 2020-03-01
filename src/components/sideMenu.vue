@@ -49,5 +49,6 @@ export default {
 <style>
 #sideMenu {
     min-width: max-content;
+    max-width: min-content;
 }
 </style>
