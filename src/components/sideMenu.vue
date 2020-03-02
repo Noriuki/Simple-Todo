@@ -1,32 +1,15 @@
 <template>
-    <v-navigation-drawer v-model="drawer" 
-    :mini-variant.sync="mini" permanent id="sideMenu">
-      <v-list-item link>
-        <v-list-item-content>
-            <v-list-item-title>{{'      '}}</v-list-item-title>
-        </v-list-item-content>
+    <v-card id="sideMenu">
+      <v-list>
 
-        <v-btn icon @click.stop="mini = !mini">
-            <v-icon>mdi-chevron-left</v-icon>
-        </v-btn>   
-      </v-list-item>
-
-      <v-divider></v-divider>
-
-      <v-list dense>
-
-        <v-list-item v-for="item in items" :key="item.title" :href="item.href">
-            <v-list-item-icon>
+        <v-list-item class="pt-3" v-for="item in items" :key="item.title" :href="item.href">
+            <v-list-item-icon class="ma-0">
                 <v-icon>{{ item.icon }}</v-icon>
             </v-list-item-icon>
-
-            <v-list-item-content>
-                <v-list-item-title>{{ item.title }}</v-list-item-title>
-            </v-list-item-content>
         </v-list-item>
         
       </v-list>
-    </v-navigation-drawer>
+    </v-card>
 </template>
 
 <script>
@@ -34,13 +17,10 @@ export default {
     name: "sideMenu",
     data () {
         return {
-            drawer: true,
             items: [
             { title: 'Home', icon: 'mdi-home', href: '/'},
-            { title: 'My Settings', icon: 'mdi-account', href: '/settings' },
-            { title: 'Users', icon: 'mdi-account-group-outline' },
+            { title: 'My Settings', icon: 'mdi-magnify', href: '/search' },
             ],
-            mini: true,
         }
     },
 }
@@ -48,7 +28,6 @@ export default {
 
 <style>
 #sideMenu {
-    min-width: max-content;
-    max-width: min-content;
+    width: min-content;
 }
 </style>

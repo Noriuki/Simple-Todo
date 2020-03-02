@@ -11,27 +11,32 @@ const state = {
 const getters =  {
     getTodos(state) {
     if(state.todos == undefined) {
-        window.localStorage.setItem('todos', JSON.stringify([{name:'First Todo', dateTodo: '', done: false, dateCreated:new Date(Date.now()).toISOString().substr(0,10)}]))
+        window.localStorage.setItem('todos', JSON.stringify([{name:'First Todo', dateTodo: '', done: false, dateCreated:Date.now()}]))
     }
     return state.todos
+    },
+    getTodosToday(state) {
+        return state.todos.filter( t => Date.parse(t.dateTodo) <= Date.now() || t.dateTodo == null)
     }
 };
 
 const mutations =  {
-    addtodo(state, newTodo) {    
-        let todos = JSON.parse(window.localStorage.getItem('todos'));
-        todos.push({name:newTodo.name,dateTodo: newTodo.dateTodo,done: false, date:Date.now()})
-        state.todos  = todos;
-        window.localStorage.setItem('todos',JSON.stringify(todos));
+    addtodo(state, newTodo) { 
+        if(newTodo.name) {
+            let todos = JSON.parse(window.localStorage.getItem('todos'));
+            todos.push({name:newTodo.name,dateTodo: newTodo.dateTodo,done: false, dateCreated:Date.now()})
+            state.todos  = todos;
+            window.localStorage.setItem('todos',JSON.stringify(todos));
+        }
     },
-    editTodo (state, {todo, name = todo.name, dateTodo = todo.dateTodo, done = todo.done}) {
+    editTodo (state, {todo, name = todo.name, dateTodo = todo.dateTodo,
+    done = todo.done,dateCreated = todo.dateCreated}) {
 
         let todos = JSON.parse(window.localStorage.getItem('todos'));
-        todos = todos.filter( t => JSON.stringify(t) !== JSON.stringify(todo))
-        todo = {name: name , dateTodo: dateTodo, done: done, dateCreated:Date.now()}
-        
-        todos.push(todo)
+        let finded = todos.find(t => t.dateCreated == todo.dateCreated)
+        todos[todos.indexOf(finded)] = {name: name , dateTodo: dateTodo, done: done, dateCreated:dateCreated}
         state.todos  = todos;
+        
         window.localStorage.setItem('todos',JSON.stringify(todos));
     },
     removeTodo(state, Todo) {

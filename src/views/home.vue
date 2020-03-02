@@ -1,16 +1,18 @@
 <template>
   <div class="d-flex-wrap" id="home">
       
-    <v-col cols="6">
+    <v-col cols="6" >
 
         <v-text-field v-model="todoText" 
             @keyup.enter="addTodo"
+            @input="message=''"
             color="success"
             placeholder="What's up?"
             :clearable="true"
+            :messages="message"
+            class="mb-6"
         >
         </v-text-field>
-
         <div class="d-flex-wrap dataPicker">
             <v-col cols="6" class="pa-0">
                 <v-date-picker v-model="date" color="green" no-title scrollable>
@@ -25,19 +27,20 @@
                     label="Choose a date"
                     prepend-icon="mdi-alarm-check"
                     readonly
-                    v-on="on"
                 ></v-text-field>
-                <v-progress-circular class="mt-2" size="120" color="success" v-model="progressPercentage"/>
+                <v-progress-circular class="mt-2" size="120" 
+                color="success" v-model="progressPercentage">
+                {{`${progressPercentage|| 0} %`}}
+                </v-progress-circular>
             </v-col>
         </div>
 
     </v-col>
-    <v-col cols="6" id="todoList">
-
+    <v-col cols="6" class="todoList">
         <v-list class="pa-0">
-          <template v-for="todo in getTodos">
-            <v-divider :key="`${todo.name}--${todo.date}--divider`"></v-divider>
-            <todoItem :key="`${todo.name}--${todo.date}`" :todo="todo"/>
+          <template v-for="todo in getTodosToday">
+            <v-divider :key="`${todo.name}--${todo.dateCreated}--divider`"></v-divider>
+            <todoItem :key="`${todo.name}--${todo.dateCreated}`" :todo="todo"/>
           </template>
         </v-list>
 
@@ -47,7 +50,6 @@
 </template>
 
 <script>
-import {mapGetters} from 'vuex';
 import todoItem from '../components/todoItem.vue';
 
 export default {
@@ -56,13 +58,16 @@ export default {
         todoItem: todoItem,
     },
     computed:{
-       ...mapGetters([
-           'getTodos',
-       ]),
+        getTodos(){
+            return this.$store.getters.getTodos;
+        },
+        getTodosToday() {
+            return this.$store.getters.getTodosToday;
+        },
         progressPercentage () {
-            const remaining = this.getTodos.filter(todo => !todo.done).length
-            const len = this.getTodos.length
-            return ( (len - remaining) * 100) / len
+            const remaining = this.getTodosToday.filter(todo => !todo.done).length
+            const len = this.getTodosToday.length
+            return Math.ceil(( (len - remaining) * 100) / len)
         }
     },
     data: () => {
@@ -71,7 +76,7 @@ export default {
             todoText: '',
             date: null,
             dateNow: new Date().setHours(0,0,0,0),
-            menu: false,
+            message: ''
         }
     },
     methods: {
@@ -85,6 +90,8 @@ export default {
                 newTodo = {name: this.todoText, dateTodo:this.date}
                 this.$store.dispatch('addTodo', newTodo);
             }
+            this.message = 'SEND!';
+            this.todoText = '';
         }
     }
 }
@@ -101,7 +108,7 @@ export default {
         height: 100vh;
         padding: 10px;
     }
-    #todoList {
+    .todoList {
         height: 78%;
         overflow: auto;
         border: 1px solid #f2f2f2;
