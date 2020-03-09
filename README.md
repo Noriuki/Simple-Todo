@@ -1,3 +1,3 @@
 # simple-todo
-##To-do made with Vue.
+<p align="center">To-do made with Vue</p>
 ![todo-image](https://github.com/Noriuki/Simple-Todo/blob/master/todo.png)
