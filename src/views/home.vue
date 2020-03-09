@@ -2,7 +2,6 @@
   <div class="d-flex-wrap" id="home">
       
     <v-col cols="6" >
-
         <v-text-field v-model="todoText" 
             @keyup.enter="addTodo"
             @input="message=''"
@@ -34,16 +33,16 @@
                 </v-progress-circular>
             </v-col>
         </div>
-
     </v-col>
+
     <v-col cols="6" class="todoList">
+        <h2>Today List</h2>
         <v-list class="pa-0">
           <template v-for="todo in getTodosToday">
             <v-divider :key="`${todo.name}--${todo.dateCreated}--divider`"></v-divider>
             <todoItem :key="`${todo.name}--${todo.dateCreated}`" :todo="todo"/>
           </template>
         </v-list>
-
     </v-col>
 
   </div>
@@ -115,6 +114,10 @@ export default {
         display: flex;
         flex-direction: column;
     }
+    .todoList h2 {
+        text-align: center;
+        border-bottom: 1px solid #f2f2f2;
+    } 
     .dataPicker{
         display: flex;
         justify-content: center!important;

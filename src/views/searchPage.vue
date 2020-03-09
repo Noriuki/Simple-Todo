@@ -1,6 +1,7 @@
 <template>
     <div class="d-flex-wrap" id="searchPage">
       <v-col cols="10" class="todoList mx-auto">
+          <h2>All To-Do</h2>
           <v-progress-linear size="20" v-model="progressPercentage" color="success"/>
           <v-list class="pa-0">
             <template v-for="todo in getTodos">
