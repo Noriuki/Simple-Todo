@@ -1,7 +1,5 @@
 # simple-todo
 Feito com o propósito de aprendizado.
-## demo
-![todo-image](https://github.com/Noriuki/Simple-Todo/blob/master/todo.png)
 
 ## Project setup
 ```
