@@ -1,4 +1,4 @@
-# simple-todo
+# simple-todo vue-2
 Feito com o propósito de aprendizado.
 
 ## Project setup
